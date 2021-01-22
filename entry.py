@@ -2,6 +2,7 @@ import argparse
 import asyncio
 import aiohttp
 from demo import create_app
+from demo.settings import load_config
 
 try:
     import uvloop
@@ -16,8 +17,12 @@ argparser.add_argument("--reload",
                        action="store_true",
                        help="Autoreload code on change")
 
+argparser.add_argument("-c", "--config", type=argparse.FileType('r'),
+                       help="Path to configuration file")
+
 args = argparser.parse_args()
-app = create_app()
+
+app = create_app(config=load_config(args.config))
 
 if args.reload:
     print('start with code reload')
